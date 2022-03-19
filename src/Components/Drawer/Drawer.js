@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import { MainContext } from '../../MainContext';
-import { Home, DashboardOutlined, Help} from '@mui/icons-material'
+import { Home, DashboardOutlined, Help, Add} from '@mui/icons-material'
 import { Link } from 'react-router-dom';
 import './Drawer.css';
 
 const Drawer = () => {
-    const { drawerOpen } = useContext(MainContext)
+    const { drawerOpen, owner, account } = useContext(MainContext)
     return (
         <div className='drawer'
             style={{
@@ -19,6 +19,10 @@ const Drawer = () => {
                     <Home style={{fontSize:32, color:'#fff', marginRight:'30px'}}/>
                     <p className='drawer__content__item__header'>Home</p>
                 </Link>
+                {/* account == owner &&  */<Link to="/create" className='drawer__content__item'>
+                    <Add style={{fontSize:32, color:'#fff', marginRight:'30px'}}/>
+                    <p className='drawer__content__item__header'>Create</p>
+                </Link>}
                 <Link to="/dashboard" className='drawer__content__item'>
                     <DashboardOutlined style={{fontSize:32, color:'#fff', marginRight:'30px'}}/>
                     <p className='drawer__content__item__header'>Dashboard</p>
