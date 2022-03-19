@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { MainContext } from '../../MainContext';
-import { Home, DashboardOutlined} from '@mui/icons-material'
+import { Home, DashboardOutlined, Help} from '@mui/icons-material'
+import { Link } from 'react-router-dom';
 import './Drawer.css';
 
 const Drawer = () => {
@@ -14,14 +15,18 @@ const Drawer = () => {
             style={{
                 opacity: !drawerOpen?0:1
             }}>
-                <div className='drawer__content__item'>
+                <Link to="/" className='drawer__content__item'>
                     <Home style={{fontSize:32, color:'#fff', marginRight:'30px'}}/>
                     <p className='drawer__content__item__header'>Home</p>
-                </div>
-                <div className='drawer__content__item'>
+                </Link>
+                <Link to="/dashboard" className='drawer__content__item'>
                     <DashboardOutlined style={{fontSize:32, color:'#fff', marginRight:'30px'}}/>
                     <p className='drawer__content__item__header'>Dashboard</p>
-                </div>
+                </Link>
+                <Link to="/help" className='drawer__content__item'>
+                    <Help style={{fontSize:32, color:'#fff', marginRight:'30px'}}/>
+                    <p className='drawer__content__item__header'>How to play</p>
+                </Link>
             </div>
         </div>
     )
