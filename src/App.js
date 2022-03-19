@@ -29,7 +29,7 @@ function App() {
         <div className="App__content">
           <Drawer />
           <div class="App__content__inner"
-          style={{marginLeft:drawerOpen?"240px":"0px"}}>
+          style={{marginLeft:drawerOpen?"290px":"0px"}}>
             <Home />
           </div>
         </div>
