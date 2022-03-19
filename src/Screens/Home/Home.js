@@ -3,8 +3,10 @@ import './Home.css';
 import { MainContext } from '../../MainContext';
 
 const Home = () => {
+  
   const [data, setData] = useState([]);
-  const { contract } = useContext(MainContext)
+  const { contract, account } = useContext(MainContext)
+
   useEffect(() => {
     const getData = async () => {
       let questions = await contract.methods.getQuestions().call();
@@ -13,6 +15,14 @@ const Home = () => {
     }
     getData()
   }, [])
+  
+  const vote = async(id,val)=>{
+    await contract.methods.vote(id,val).send({from:account})
+    .once('receipt',(rec)=>{
+      alert("Voted successfully");
+    })
+  }
+
   return (
     <div>
       {data.map((item, index) => {
@@ -21,6 +31,10 @@ const Home = () => {
           <div className="question__option__container">
             <p>{item.option1}</p>
             <p>{item.option2}</p>
+          </div>
+          <div className="question__option__container">
+            <button onClick={()=>vote(item.id,1)}>Vote {item.option1}</button>
+            <button onClick={()=>vote(item.id,2)}>Vote {item.option2}</button>
           </div>
         </div>
       })}

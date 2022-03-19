@@ -21,6 +21,10 @@ function App() {
   const [contract, setContract] = useState();
   const [owner, setOwner] = useState();
   const [Ready, setReady] = useState(false);
+  const [price,setPrice] = useState({
+    bid:0,
+    fee:0
+  }) 
 
   useEffect(() => {
     async function load() {
@@ -34,6 +38,12 @@ function App() {
       if (VotingGameData) {
         const VotingGameContract = new web3.eth.Contract(VotingGame.abi, VotingGameData.address);
         const owner = await VotingGameContract.methods.owner().call()
+        const fee = await VotingGameContract.methods.fee().call()
+        const bid = await VotingGameContract.methods.bid().call()
+        setPrice({
+          bid:bid,
+          fee:fee
+        })
         setContract(VotingGameContract);
         setOwner(owner);
         setReady(true);
@@ -47,7 +57,7 @@ function App() {
 
   return (
     <div className="App">
-      <MainContext.Provider value={{ account, drawerOpen, contract, owner, setOpenDrawer: (val) => setDrawerOpen(val) }}>
+      <MainContext.Provider value={{ account, drawerOpen, contract, owner, price, setOpenDrawer: (val) => setDrawerOpen(val) }}>
         <Router>
           <Header />
           {Ready && <div className="App__content">

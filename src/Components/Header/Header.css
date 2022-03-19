@@ -4,14 +4,15 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding:0 20px;
+    padding:0 10px;
     height: 10vh;
-    width: 100vw;
+    width: 100%;
     position:fixed;
 }
 
 .header__account{
     display: flex;
+    margin-right: 30px;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;

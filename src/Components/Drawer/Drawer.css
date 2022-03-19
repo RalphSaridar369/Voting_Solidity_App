@@ -17,6 +17,10 @@
     color: white;
 }
 
+.drawer__content__price{
+    margin-bottom: 40px;
+}
+
 .drawer__content__item{
     display: flex;
     flex-direction: row;
