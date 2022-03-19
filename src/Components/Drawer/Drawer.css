@@ -1,0 +1,17 @@
+.drawer {
+    width: 0px;
+    background-color: #748b97;
+    height: 90vh;
+    transition: width 2s;
+    display: flex;
+    flex-direction: column;
+    padding: 100px 0px;
+    position: fixed;
+    align-items: center;
+}
+
+.drawer__content {
+    opacity: 0;
+    transition: opacity 1s;
+    color: white;
+}
