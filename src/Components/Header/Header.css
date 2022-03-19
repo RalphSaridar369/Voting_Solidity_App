@@ -6,6 +6,8 @@
     justify-content: space-between;
     padding:0 20px;
     height: 10vh;
+    width: 100vw;
+    position:fixed;
 }
 
 .header__account{
@@ -22,4 +24,11 @@
 .header__account p{
     padding-right: 20px;
     color:white
+}
+
+
+@media only screen and (max-width: 600px) {
+    .header__account__address{
+        display: none;
+    }
 }

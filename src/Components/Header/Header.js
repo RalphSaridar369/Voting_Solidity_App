@@ -13,7 +13,7 @@ const Header = () => {
                 <MenuOutlined style={{ color: 'white', fontSize: 40 }} />
             </div>
             <div className="header__account">
-                {account && <><p>{account}</p>
+                {account && <><p className='header__account__address'>{account}</p>
                     <Identicon string={account} size={30} palette={["#fff"]} /></>}
             </div>
         </div>

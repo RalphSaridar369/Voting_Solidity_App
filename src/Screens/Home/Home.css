@@ -1,0 +1,16 @@
+.question{
+    background-color: rgba(211, 211, 211, 0.3);
+    padding:20px 40px;
+    margin:40px 0px;
+    border-radius: 20px;
+}
+
+.question__header{
+    font-size: 30px;
+}
+
+.question__option__container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

@@ -20,6 +20,7 @@ function App() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [contract, setContract] = useState();
   const [owner, setOwner] = useState();
+  const [Ready, setReady] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -35,6 +36,7 @@ function App() {
         const owner = await VotingGameContract.methods.owner().call()
         setContract(VotingGameContract);
         setOwner(owner);
+        setReady(true);
       }
     }
 
@@ -48,7 +50,7 @@ function App() {
       <MainContext.Provider value={{ account, drawerOpen, contract, owner, setOpenDrawer: (val) => setDrawerOpen(val) }}>
         <Router>
           <Header />
-          <div className="App__content">
+          {Ready && <div className="App__content">
             <Drawer />
             <div className="App__content__inner"
               style={{ marginLeft: drawerOpen ? "290px" : "0px" }}>
@@ -63,11 +65,12 @@ function App() {
                   <Dashboard />
                 </Route>
                 <Route path="/create">
-                  <Create />
+                  <Create
+                   />
                 </Route>
               </Switch>
             </div>
-          </div>
+          </div>}
         </Router>
       </MainContext.Provider>
     </div>

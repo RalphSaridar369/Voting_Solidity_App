@@ -12,13 +12,14 @@ contract VotingGame{
         string option2;
     }
 
+    Question[] public questions;
+
     constructor(){
         owner = msg.sender;
         fee = 5 * 10 ** 16;
     }
 
 
-    Question[] public questions;
 
     modifier onlyOwner(){
         require(msg.sender == owner, "Address must be owner");
@@ -26,10 +27,15 @@ contract VotingGame{
     }
 
     function createQuestion(string memory _question, string memory _opt1, string memory _opt2) public onlyOwner(){
-        questions.push(Question(_question,_opt1,_opt2));
+        Question memory add = Question(_question,_opt1,_opt2);
+        questions.push(add);
     }
 
     function changeFee(uint _fee) public onlyOwner(){
         fee = _fee;
+    }
+    
+    function getQuestions() public view returns (Question[] memory) {
+        return questions;
     }
 }
