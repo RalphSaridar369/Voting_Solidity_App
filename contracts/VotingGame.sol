@@ -39,7 +39,7 @@ contract VotingGame{
     }
 
     function createQuestion(string memory _question, string memory _opt1, string memory _opt2) public onlyOwner(){
-        Question add = new Question(_question,_opt1,_opt2);
+        Question add = new Question(countQuestion,_question,_opt1,_opt2);
         questions.push(add);
         countQuestion++;
     }

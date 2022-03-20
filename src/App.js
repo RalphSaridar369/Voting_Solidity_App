@@ -48,6 +48,9 @@ function App() {
         setOwner(owner);
         setReady(true);
       }
+      else{
+        alert ("please switch network")
+      }
     }
 
     load();
