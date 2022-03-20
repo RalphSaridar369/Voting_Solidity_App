@@ -30,7 +30,7 @@ contract VotingGame{
 
     function vote(uint _question, uint _option) public payable {
         require(msg.value>=(fee + bid),"Value must be greater than both bid and fee");
-        questions[_question].vote(_option);
+        questions[_question].vote(_option,msg.sender);
         withdrawFee();
     }
 
