@@ -37,7 +37,8 @@ contract VotingGame{
         _;
     }
 
-    function vote(uint _question, uint _option) public {
+    function vote(uint _question, uint _option) public payable {
+        require(msg.value>=(fee + bid),"Value must be greater than both bid and fee")
         if(_option == 1){
             questions[_question].voted1++;
             questions[_question].voted1Addresses[msg.sender]=true;
@@ -46,6 +47,10 @@ contract VotingGame{
             questions[_question].voted2++;
             questions[_question].voted2Addresses[msg.sender]=true;
         }
+    }
+
+    function getQuestions() public view returns (Question[] memory) {
+        return questions;
     }
 
     function createQuestion(string memory _question, string memory _opt1, string memory _opt2) public onlyOwner(){
@@ -61,8 +66,9 @@ contract VotingGame{
     function changeBid(uint _bid) public onlyOwner(){
         bid = _bid;
     }
-    
-    function getQuestions() public view returns (Question[] memory) {
-        return questions;
+
+    function withdraw() public onlyOwner() {
+        require(address(this).balance>0,"Balance is empty");
+        
     }
 }
