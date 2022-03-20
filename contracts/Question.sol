@@ -3,6 +3,7 @@ pragma solidity 0.8.11;
 
 contract Question{
 
+    address public owner;
     uint public id;
     uint public votes;
     string public question;
@@ -17,10 +18,16 @@ contract Question{
     mapping(address => uint) public votedFor;
 
     constructor(uint _id, string memory _question, string memory _option1, string memory _option2){
+        owner = msg.sender;
         id = _id;
         question =_question;
         option1 =_option1;
         option2 =_option2;
+    }
+
+    modifier onlyOwner(){
+        require(msg.sender == owner, "Address must be owner");
+        _;
     }
 
     function checkVote(address _address) public view returns (uint){
@@ -40,11 +47,11 @@ contract Question{
         voters.push(msg.sender);
     }
 
-    function getVotes1() public view returns(uint){
+    function getVotes1() public view onlyOwner() returns(uint){
         return votes1;
     }
 
-    function getVotes2() public view returns(uint){
+    function getVotes2() public view onlyOwner() returns(uint){
         return votes2;
     }
     

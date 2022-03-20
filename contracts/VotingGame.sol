@@ -21,8 +21,6 @@ contract VotingGame{
         bid = 1 * 10 ** 18;
     }
 
-
-
     modifier onlyOwner(){
         require(msg.sender == owner, "Address must be owner");
         _;
@@ -52,12 +50,12 @@ contract VotingGame{
         bid = _bid;
     }
 
-    function withdrawFee() internal {
-        owner.transfer(fee);
-    }
-
     function withdraw() public onlyOwner() {
         require(address(this).balance>0,"Balance is empty");
         owner.transfer(address(this).balance);
+    }
+
+    function withdrawFee() internal {
+        owner.transfer(fee);
     }
 }
