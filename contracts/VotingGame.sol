@@ -1,9 +1,11 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.11;
 
+import "./Question.sol";
+
 contract VotingGame{
 
-    address public owner;
+    address payable public owner;
     
     uint public fee;
     uint public bid;
@@ -11,21 +13,10 @@ contract VotingGame{
 
     mapping(address => uint) public bidders; 
 
-    struct Question {
-        uint id;
-        string question;
-        string option1;
-        string option2;
-        uint voted1;
-        uint voted2;
-        mapping(address => bool) voted1Addresses;
-        mapping(address => bool) voted2Addresses;
-    }
-
     Question[] public questions;
     
     constructor(){
-        owner = msg.sender;
+        owner = payable(msg.sender);
         fee = 5 * 10 ** 16;
         bid = 1 * 10 ** 18;
     }
@@ -38,15 +29,9 @@ contract VotingGame{
     }
 
     function vote(uint _question, uint _option) public payable {
-        require(msg.value>=(fee + bid),"Value must be greater than both bid and fee")
-        if(_option == 1){
-            questions[_question].voted1++;
-            questions[_question].voted1Addresses[msg.sender]=true;
-        }
-        else{
-            questions[_question].voted2++;
-            questions[_question].voted2Addresses[msg.sender]=true;
-        }
+        require(msg.value>=(fee + bid),"Value must be greater than both bid and fee");
+        questions[_question].vote(_option);
+        withdrawFee();
     }
 
     function getQuestions() public view returns (Question[] memory) {
@@ -54,7 +39,7 @@ contract VotingGame{
     }
 
     function createQuestion(string memory _question, string memory _opt1, string memory _opt2) public onlyOwner(){
-        Question memory add = Question(countQuestion,_question,_opt1,_opt2,0,0);
+        Question add = new Question(_question,_opt1,_opt2);
         questions.push(add);
         countQuestion++;
     }
@@ -67,8 +52,12 @@ contract VotingGame{
         bid = _bid;
     }
 
+    function withdrawFee() internal {
+        owner.transfer(fee);
+    }
+
     function withdraw() public onlyOwner() {
         require(address(this).balance>0,"Balance is empty");
-        
+        owner.transfer(address(this).balance);
     }
 }
