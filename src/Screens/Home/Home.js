@@ -31,8 +31,6 @@ const Home = () => {
         let votedFor = await QuestionContract.methods.checkVote(account).call();
         let closed = await QuestionContract.methods.closed().call();
         let winner = await QuestionContract.methods.winner().call();
-        let balance = await QuestionContract.methods.returnBalance().call();
-        console.log(balance);
 
         let payload =
         {

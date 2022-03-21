@@ -11,6 +11,8 @@ contract VotingGame{
     uint public bid;
     uint public countQuestion;
 
+    address[] public biddersArray; 
+
     mapping(address => uint) public bidders; 
     mapping(uint => uint) public questionBalance;
     
@@ -30,6 +32,13 @@ contract VotingGame{
     function vote(uint _question, uint _option) public payable {
         require(msg.value>=(fee + bid),"Value must be greater than both bid and fee");
         questions[_question].vote(_option,msg.sender,fee,bid);
+        bool exists = false;
+        for(uint i=0; i<biddersArray.length;i++){
+            if(biddersArray[i]==msg.sender)
+                exists = true;
+        }
+        if(!exists)
+            biddersArray.push(msg.sender);
         bidders[msg.sender]+=1;
         uint sum = fee + bid;
         questionBalance[_question]=sum;
@@ -42,6 +51,14 @@ contract VotingGame{
 
     function getQuestions() public view returns (Question[] memory) {
         return questions;
+    }
+
+    function withdrawFee() internal {
+        owner.transfer(fee);
+    }
+
+    function returnBidders() public view returns (address[] memory){
+        return biddersArray;
     }
 
     function createQuestion(string memory _question, string memory _opt1, string memory _opt2) public onlyOwner(){
@@ -63,7 +80,4 @@ contract VotingGame{
         owner.transfer(address(this).balance);
     }
 
-    function withdrawFee() internal {
-        owner.transfer(fee);
-    }
 }
