@@ -6,10 +6,14 @@ contract Question{
     address public owner;
     uint public id;
     uint public votes;
+    uint public winner;
     string public question;
     string public option1;
     string public option2;
+    bool public closed;
+    
 
+    uint private balance;
     uint private votes1;
     uint private votes2;
 
@@ -23,6 +27,7 @@ contract Question{
         question =_question;
         option1 =_option1;
         option2 =_option2;
+        closed = false;
     }
 
     modifier onlyOwner(){
@@ -30,11 +35,15 @@ contract Question{
         _;
     }
 
+    function returnBalance() public view returns(uint){
+        return balance;
+    }
+
     function checkVote(address _address) public view returns (uint){
         return votedFor[_address];
     }
 
-    function vote( uint _option, address _address) public payable {
+    function vote( uint _option, address _address, uint _fee, uint _bid) public payable {
         require(votedFor[msg.sender] == 0,"Already voted");
         votedFor[_address] = _option;
         if(_option==1){
@@ -44,15 +53,29 @@ contract Question{
             votes2++;
         }
         votes++;
+        balance+= _fee + _bid;
         voters.push(msg.sender);
     }
 
-    function getVotes1() public view onlyOwner() returns(uint){
+    function closeQuestion() public onlyOwner(){
+        closed = true;
+        getWinner();
+    }
+
+    function getWinner()internal{
+        winner = getVotes1()>getVotes2()?2:1;
+    }
+
+    function getVotes1() internal view returns(uint){
         return votes1;
     }
 
-    function getVotes2() public view onlyOwner() returns(uint){
+    function getVotes2() internal view returns(uint){
         return votes2;
+    }
+
+    function getBalance() internal view returns(uint){
+        return balance;
     }
     
 }

@@ -12,7 +12,8 @@ contract VotingGame{
     uint public countQuestion;
 
     mapping(address => uint) public bidders; 
-
+    mapping(uint => uint) public questionBalance;
+    
     Question[] public questions;
     
     constructor(){
@@ -28,8 +29,15 @@ contract VotingGame{
 
     function vote(uint _question, uint _option) public payable {
         require(msg.value>=(fee + bid),"Value must be greater than both bid and fee");
-        questions[_question].vote(_option,msg.sender);
+        questions[_question].vote(_option,msg.sender,fee,bid);
+        uint sum = fee + bid;
+        questionBalance[_question]=sum;
         withdrawFee();
+    }
+
+    function closeQuestion (uint _id) public {
+        questions[_id].closeQuestion();
+        questions[_id].closeQuestion();
     }
 
     function getQuestions() public view returns (Question[] memory) {

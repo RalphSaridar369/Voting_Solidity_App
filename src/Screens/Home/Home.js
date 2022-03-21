@@ -8,7 +8,7 @@ import { divideBy, multiplyBy } from '../../helpers';
 const Home = () => {
   
   const [data, setData] = useState([]);
-  const { contract, account, price } = useContext(MainContext)
+  const { contract, account, price, owner } = useContext(MainContext)
 
   useEffect(() => {
     const getData = async () => {
@@ -29,7 +29,10 @@ const Home = () => {
         let option1 = await QuestionContract.methods.option1().call();
         let option2 = await QuestionContract.methods.option2().call();
         let votedFor = await QuestionContract.methods.checkVote(account).call();
-
+        let closed = await QuestionContract.methods.closed().call();
+        let winner = await QuestionContract.methods.winner().call();
+        let balance = await QuestionContract.methods.returnBalance().call();
+        console.log(balance);
 
         let payload =
         {
@@ -38,7 +41,9 @@ const Home = () => {
           option1,
           option2,
           votedFor,
-          votes
+          votes,
+          closed,
+          winner
         }
         console.log("Name: ",ques);
         array.push(payload)
@@ -59,18 +64,36 @@ const Home = () => {
     })
   }
 
+  const closeQuestion = async(id) =>{
+    let choice = window.confirm("Are you sure you want to close this question ?");
+    if(choice){
+      await contract.methods.closeQuestion(id).send({from:account})
+      .once('receipt',(rec)=>{
+        alert("Question closed successfully");
+      })
+    }
+  }
+
   return (
     <div>
       {data?.map((item, index) => {
-        return <div className="question" key={index}>
-          <h2>{item.votes} voted so far</h2>
+        return <div className={`question ${item.closed && "closed"}`} key={index}>
+          {item.closed &&<div className='question__winner'>
+            <h1>Question is closed</h1>
+            <h2>{item.winner=="1"?item.option1:item.option2} Won</h2>
+          </div>}
+          <div className='question__header__info'>
+            <h2>{item.votes} voted so far</h2>
+            {(account == owner && !item.closed) && <h2 className='x__button'
+            onClick={()=>closeQuestion(item.id)}>X</h2>}
+          </div>
           <h1 className='question__header'>{item.question}</h1>
           <div className="question__option__container">
             <p>{item.option1}</p>
             <p>{item.option2}</p>
           </div>
           <div className="question__option__container">
-           {item.votedFor == "0" ?
+           {item.votedFor == "0" && !item.closed ?
            <><button onClick={()=>vote(item.id,1)}>Vote {item.option1}</button>
             <button onClick={()=>vote(item.id,2)}>Vote {item.option2}</button>
           </>:
